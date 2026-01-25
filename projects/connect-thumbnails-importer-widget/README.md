@@ -4,7 +4,11 @@ All rights reserved.
 -->
 
 
-https://github.com/user-attachments/assets/1ee2a66a-ebdd-42e8-90d4-23adfc7110b3
+
+https://github.com/user-attachments/assets/5fb0be66-3018-4d2a-b543-e029a370e955
+
+
+
 
 
 # Batch Import Entity Thumbnails From Excel 📸
