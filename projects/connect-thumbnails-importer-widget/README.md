@@ -3,6 +3,10 @@ Copyright (c) 2025 bro.tiger
 All rights reserved.
 -->
 
+
+https://github.com/user-attachments/assets/1ee2a66a-ebdd-42e8-90d4-23adfc7110b3
+
+
 # Batch Import Entity Thumbnails From Excel 📸
 
 Batch-import thumbnails for any ftrack entities (Shots, Tasks, Assets, Folders, etc.) — simple, visual, and fast.
