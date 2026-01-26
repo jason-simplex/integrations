@@ -32,8 +32,8 @@ Batch-import thumbnails for any ftrack entities (Shots, Tasks, Assets, Folders, 
    - Choose the **Import Sheet** containing your data.
    - Select the **Image Column** (the column containing the embedded pictures) 🖼️
 4. **Build Entity Context**:
-   - Use the "Entity Context Builder" to define how to find your entities.
-   - Drag and drop columns from "Available Columns" to the builder list.
+   - Use the **Entity Context Builder** to define how to find your entities.
+   - **Add** and **Remove** columns from "Available Columns" to the builder list.
    - _Example_: For a Shot under a Sequence, add "Sequence" then "Shot". The last column determines the target entity. 🎯
 5. **Run Import**: Click “Import” to process the file ▶️
 6. **Verify**: Check the job status and see your new thumbnails in ftrack! ✅
