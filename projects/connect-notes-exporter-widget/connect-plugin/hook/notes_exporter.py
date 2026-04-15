@@ -1138,11 +1138,23 @@ def export_notes_job(
 
         typed_contexts = exporter._fetch_all_typed_contexts(project_id)
         ctx_by_id, children_map = _build_context_maps(typed_contexts)
-        all_context_ids = _compute_context_scope(
-            selected_context_ids,
-            children_map,
-            include_descendants,
-        )
+        # Allow selecting the project root in UI.
+        # We interpret selected_context_ids containing project_id as "project root selected".
+        project_root_selected = project_id in (selected_context_ids or [])
+        if project_root_selected:
+            # Start from top-level contexts under this project.
+            top_level_context_ids = list(children_map.get(project_id, []))
+            all_context_ids = (
+                _compute_context_scope(top_level_context_ids, children_map, include_descendants)
+                if include_descendants
+                else set()
+            )
+        else:
+            all_context_ids = _compute_context_scope(
+                selected_context_ids,
+                children_map,
+                include_descendants,
+            )
 
         tasks_by_id: Dict[str, dict] = {}
         asset_versions: List[dict] = []
@@ -1179,6 +1191,9 @@ def export_notes_job(
             asset_versions,
             export_asset_version_notes,
         )
+        # If project root was selected, include Notes attached directly to the Project entity.
+        if project_root_selected and not export_asset_version_notes:
+            parent_ids.add(project_id)
         notes = (
             exporter._fetch_notes_by_parent_ids(project_id, list(parent_ids))
             if parent_ids
@@ -1674,9 +1689,10 @@ class NotesExporterWidget(ftrack_connect.ui.application.ConnectWidget):
         if not selected:
             show_warn(self, "Nothing selected", "Please select one or more nodes in the tree.")
             return
-        # Collect selected context/task ids (ignore project root selection)
+        # Collect selected context/task ids (project root selection is allowed)
         ctx_ids: List[str] = []
         task_ids: List[str] = []
+        project_selected = False
         for it in selected:
             data = it.data(0, QtCore.Qt.UserRole)
             if not data:
@@ -1686,8 +1702,15 @@ class NotesExporterWidget(ftrack_connect.ui.application.ConnectWidget):
                 ctx_ids.append(eid)
             elif etype == "Task":
                 task_ids.append(eid)
-        if not ctx_ids and not task_ids:
-            show_warn(self, "Invalid selection", "Please select one or more items (not only the project root).")
+            elif etype == "Project":
+                project_selected = True
+        # If project root is selected, treat it as selecting the whole project scope.
+        # (The export job will interpret project_id specially.)
+        if project_selected:
+            ctx_ids = [project_id]
+            task_ids = []
+        elif not ctx_ids and not task_ids:
+            show_warn(self, "Invalid selection", "Please select one or more items in the tree.")
             return
 
         include_desc = bool(self.cb_desc.isChecked())
