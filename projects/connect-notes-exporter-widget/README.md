@@ -1,3 +1,8 @@
+
+
+[notes-exporter](https://github.com/user-attachments/assets/782f6762-fb55-4f17-b16e-515b001a0db7)
+
+
 # 📤 Ftrack Notes Exporter (Export Notes to Excel)
 
 Purpose: turn ftrack **Notes / Replies / image attachments** into a clean **Excel (.xlsx)** you can share with production, clients, or teammates—for handover, reviews, audits, and archiving.
